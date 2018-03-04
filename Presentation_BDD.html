@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="generator" content="pandoc">
+        <meta name="author" content="Division des enseignements en informatique" />
+        <meta name="dcterms.date" content="2017-01-01" />
+        <title>Bases de données et modélisation</title>
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+		
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+        <link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
+
+
+	<!-- Styles ENSG-IGN -->
+	<link rel="stylesheet" href="css/ign.css">
+
+        <!-- Printing and PDF exports -->
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script type="text/javascript">
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = 'reveal.js/css/print/'+ (window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper') + '.css';
+            link.media = 'print';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script type="text/javascript" type="text/javascript" src="reveal.js/lib/js/html5shiv.js"></script>
+        <![endif]-->
+        <!-- -H/- -include-in-header -->
+    </head>
+    <body>
+        <!-- -B/- -include-before-body -->
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+
+                <section>
+                    <h1>Bases de données et modélisation</h1>
+                    <h3>Division des enseignements en informatique</h3>
+                    <h4>2017</h4>
+                </section>
+
+                <!-- - -toc/- -table-of-contents -->
+
+            <!-- ne pas indenter le $body$ sinon les codes (highlight) vont l'être aussi !!! -->
+<section id="objectifs" class="level2">
+<h2>Objectifs</h2>
+<ul>
+<li>Savoir ce qu'est une base de données, un SGBD, un SGBDR</li>
+<li>Savoir comment y sont représentées les données</li>
+<li>Connaître les principaux SGBD du marché</li>
+<li>Etre capable de modéliser un problème avec le formalisme UML</li>
+<li>Savoir ce qu'est le language SQL et à quoi il sert</li>
+</ul>
+</section>
+<section id="les-bases-de-données" class="level1">
+<h1>Les bases de données</h1>
+<section id="quest-ce-quune-base-de-données" class="level2">
+<h2>Qu'est ce qu'une base de données ?</h2>
+</section>
+<section id="quest-ce-quune-base-de-données-1" class="level2">
+<h2>Qu'est ce qu'une base de données ?</h2>
+<p></br></p>
+<blockquote>
+<p>Une <strong>base de données</strong> est un ensemble de données qui sont stockées sur un support informatique, et structurées de manière à pouvoir facilement consulter et modifier leur contenu.</p>
+</blockquote>
+</section>
+<section id="systèmes-de-gestion-de-bases-de-données" class="level2">
+<h2>Systèmes de Gestion de Bases de Données</h2>
+<p></br></p>
+<blockquote>
+<p>Le <strong>SGBD</strong> est le logiciel destiné au stockage et à la manipulation de bases de données.</p>
+</blockquote>
+</section>
+<section id="pourquoi-des-bdd-et-des-sgbd" class="level2">
+<h2>Pourquoi des BDD et des SGBD ?</h2>
+</section>
+<section id="pourquoi-des-bdd-et-des-sgbd-1" class="level2">
+<h2>Pourquoi des BDD et des SGBD ?</h2>
+<ul>
+<li>2 types de mémoire</li>
+<li>Accroissement des volumes stockés</li>
+<li>Accès disques <em>lents</em></li>
+<li>Actions aboutissant à des incohérences</li>
+<li>Optimiser la travail des utilisateurs</li>
+</ul>
+</section>
+<section id="acteurs-des-sgbd" class="level2">
+<h2>Acteurs des SGBD</h2>
+<ul>
+<li>Différents profils d'utilisateurs
+<ul>
+<li>l'expert ou administrateur</li>
+<li>le développeur ou concepteur</li>
+<li>l'utilisateur non initié</li>
+</ul></li>
+</ul>
+</section>
+<section id="fonctionnalités-dun-sgbd" class="level2">
+<h2>Fonctionnalités d'un SGBD</h2>
+<ul>
+<li>Fonctionnalités attendues :
+<ul>
+<li>consultation et modification des données</li>
+<li>stockage sur un support physique</li>
+<li>cohérence des données</li>
+<li>sécurisation des accès</li>
+<li>gestion des accès multiples</li>
+<li>reprises sur incidents</li>
+</ul></li>
+</ul>
+</section>
+<section id="petit-historique" class="level2">
+<h2>Petit historique</h2>
+<ul>
+<li>1956 : premier disque dur</li>
+<li>1964 : apparition du concept de base de données</li>
+<li>1964 : moteur de base de données réseau IDS de General Electric</li>
+<li>1966 : moteur de base de données hiérarchique IMS d'IBM</li>
+<li>1970 : thèse de E. Codd introduisant le modèle relationnel</li>
+<li>1974 : création du langage SQL</li>
+<li>1974 : première version de INGRES</li>
+<li>1975 : modèle entité-association</li>
+<li>1977 : fondation de la société Oracle</li>
+</ul>
+</section>
+<section id="aujourdhui" class="level2">
+<h2>Aujourd'hui</h2>
+<ul>
+<li>Multiplication des besoins et des données
+<ul>
+<li>base de données réparties (1989)</li>
+<li>base de données orientées objets (1990)</li>
+<li>NoSQL (1998)</li>
+</ul></li>
+</ul>
+</section>
+<section id="utilisateurs-de-sgbd" class="level2">
+<h2>Utilisateurs de SGBD</h2>
+<ul>
+<li>Banques</li>
+<li>Sites web marchands</li>
+<li>Réseaux sociaux</li>
+<li>Moteurs de recherche</li>
+<li>Producteurs de données (ex : IGN)</li>
+<li>SIG</li>
+<li>...</li>
+</ul>
+</section>
+<section id="les-marché-des-sgbd" class="level2">
+<h2>Les marché des SGBD</h2>
+<figure>
+<img src="img/logos_sgbd.png" alt="Logos de SGBD du marché" /><figcaption>Logos de SGBD du marché</figcaption>
+</figure>
+</section>
+<section id="notion-de-transation" class="level2">
+<h2>Notion de transation</h2>
+<blockquote>
+<p>Une <strong>transaction</strong> est une séquence d'actions sur une base de données.</p>
+</blockquote>
+<ul>
+<li>Etat initial cohérent</li>
+<li>Etat final cohérent</li>
+<li>Contraintes d'intégrité</li>
+</ul>
+</section>
+<section id="propriétés-acid" class="level2">
+<h2>Propriétés ACID</h2>
+<ul>
+<li>4 propriétés assurant la fiabilité des transactions :
+<ul>
+<li>Atomicité : une transaction est un ensemble d'instructions indivisibles</li>
+<li>Cohérence : une transaction ne peut amener à violer une des contraintes de la base</li>
+<li>Isolation : deux transactions concurrentes ne peuvent intéragir entre elles</li>
+<li>Durabilité : si une panne survient pendant une transaction, l'ensemble de la transaction doit être annulée</li>
+</ul></li>
+</ul>
+</section>
+<section id="ordonnancement-des-transactions" class="level2">
+<h2>Ordonnancement des transactions</h2>
+<figure>
+<img src="img/concurrence_transactions.png" alt="Exécutions concurrentes" /><figcaption>Exécutions concurrentes</figcaption>
+</figure>
+</section>
+</section>
+<section id="modélisation-dune-base-de-données" class="level1">
+<h1>Modélisation d'une base de données</h1>
+<section id="processus-de-conception" class="level2">
+<h2>Processus de conception</h2>
+<ol type="1">
+<li>Description du monde réel
+<ul>
+<li><em>modèle conceptuel</em></li>
+</ul></li>
+<li>Traduction du modèle dans le SGBD
+<ul>
+<li><em>modèle logique</em></li>
+</ul></li>
+<li>Implémentation réelle de la BDD
+<ul>
+<li><em>modèle physique</em></li>
+</ul></li>
+</ol>
+</section>
+<section id="les-différents-types-de-modèles" class="level2">
+<h2>Les différents types de modèles</h2>
+<ul>
+<li>Hiérarchique</li>
+</ul>
+<figure>
+<img src="img/modele_hierarchique.png" alt="SGBD hiérarchique" /><figcaption>SGBD hiérarchique</figcaption>
+</figure>
+<ul>
+<li>Réseau</li>
+</ul>
+<figure>
+<img src="img/modele_reseau.png" alt="SGBD réseau" /><figcaption>SGBD réseau</figcaption>
+</figure>
+</section>
+<section id="les-différents-types-de-modèles-1" class="level2">
+<h2>Les différents types de modèles</h2>
+<ul>
+<li>Relationnel</li>
+</ul>
+<figure>
+<img src="img/modele_relationnel.png" alt="SGBD relationnel" /><figcaption>SGBD relationnel</figcaption>
+</figure>
+</section>
+<section id="les-différents-types-de-modèles-2" class="level2">
+<h2>Les différents types de modèles</h2>
+<ul>
+<li>Orienté colonne</li>
+</ul>
+<figure>
+<img src="img/modele_oriente_colonne.png" alt="SGBD orienté colonne" /><figcaption>SGBD orienté colonne</figcaption>
+</figure>
+</section>
+<section id="les-différents-types-de-modèles-3" class="level2">
+<h2>Les différents types de modèles</h2>
+<ul>
+<li>Orientée document</li>
+</ul>
+<figure>
+<img src="img/modele_oriente_document.png" alt="SGBD orienté document" /><figcaption>SGBD orienté document</figcaption>
+</figure>
+</section>
+<section id="les-différents-types-de-modèles-4" class="level2">
+<h2>Les différents types de modèles</h2>
+<ul>
+<li>Graphe</li>
+</ul>
+<figure>
+<img src="img/modele_graphe.png" alt="SGBD graphe" /><figcaption>SGBD graphe</figcaption>
+</figure>
+</section>
+</section>
+<section id="le-modèle-relationnel" class="level1">
+<h1>Le modèle relationnel</h1>
+<section id="généralités" class="level2">
+<h2>Généralités</h2>
+<ul>
+<li>Créé par Codd en 1970</li>
+<li>Repose sur la théorie mathématique des ensembles</li>
+<li>Modèle le plus utilisé actuellement</li>
+<li><strong>SGBDR</strong> = SGBD Relationnel</li>
+<li>Données de la base de données contenues dans des <em>relations</em></li>
+</ul>
+</section>
+<section id="exemples-de-sgbdr" class="level2">
+<h2>Exemples de SGBDR</h2>
+<figure>
+<img src="img/logos_sgbdr.png" alt="Logos des principaux SGBD relationnels" /><figcaption>Logos des principaux SGBD relationnels</figcaption>
+</figure>
+</section>
+<section id="les-relations" class="level2">
+<h2>Les relations</h2>
+<blockquote>
+<p>Une <strong>relation</strong>, ou <em>table</em>, est un ensemble de données relatives au même sujet.</p>
+</blockquote>
+<ul>
+<li>Sorte de contrat sur la forme attendue des données</li>
+<li>Relations représentées sour forme de tables : en-tête + lignes</li>
+</ul>
+</section>
+<section id="les-colonnes" class="level2">
+<h2>Les colonnes</h2>
+<blockquote>
+<p>La <strong>colonne</strong> est le constituant de la relation.</p>
+</blockquote>
+<ul>
+<li>1 colonne = 1 <em>nom</em> + 1 <em>domaine</em></li>
+<li><strong>Domaine</strong> : contrainte sur le contenu de la colonne
+<ul>
+<li>type (texte, nombre, etc.)</li>
+<li>longueur (20 caractères, 32 bits, etc.)</li>
+<li>règles (non nul, inférieur à 10, etc.)</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple" class="level2">
+<h2>Exemple</h2>
+<ul>
+<li>La relation VILLE contient trois colonnes nommées :
+<ul>
+<li>NOM</li>
+<li>CODE_POSTAL</li>
+<li>POPULATION</li>
+</ul></li>
+<li>La représentation classique de la relation est :
+<ul>
+<li>VILLE(NOM, CODE_POSTAL, POPULATION)</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-1" class="level2">
+<h2>Exemple</h2>
+<ul>
+<li>Le domaine de la colonne NOM est le suivant :
+<ul>
+<li>Type : texte</li>
+<li>Longueur : 100 caractères</li>
+<li>Les caractères autorisés sont les suivants : 0-9, a-z, A-Z, caractères accentuées, espace, &quot;- / ' &amp;&quot;</li>
+<li>Valeur nulle non autorisée</li>
+<li>Pas de valeur par défaut</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-2" class="level2">
+<h2>Exemple</h2>
+<ul>
+<li>Le domaine de la colonne CODE_POSTAL est le suivant :
+<ul>
+<li>Type : texte</li>
+<li>Longueur : 5 caractères</li>
+<li>Les deux premiers chiffres doivent correspondre à un numéro de département</li>
+<li>Valeur nulle non autorisée</li>
+<li>Pas de valeur par défaut</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-3" class="level2">
+<h2>Exemple</h2>
+<ul>
+<li>Le domaine de la colonne POPULATION est le suivant :
+<ul>
+<li>Type : nombre entier</li>
+<li>Longueur : 32 bits (<em>valeur max = 4 294 967 295</em>)</li>
+<li>Valeur nulle par défaut</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-4" class="level2">
+<h2>Exemple</h2>
+<p>Table VILLE</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">NOM</th>
+<th style="text-align: center;">CODE_POSTAL</th>
+<th style="text-align: right;">POPULATION</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Paris</td>
+<td style="text-align: center;">75000</td>
+<td style="text-align: right;">2229621</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Champs-sur-Marne</td>
+<td style="text-align: center;">77420</td>
+<td style="text-align: right;">24913</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ajaccio</td>
+<td style="text-align: center;">2A004</td>
+<td style="text-align: right;">67507</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="les-liens-entre-relations" class="level2">
+<h2>Les liens entre relations</h2>
+<ul>
+<li>Opérations possibles entre relations :
+<ul>
+<li>Union</li>
+<li>Intersection</li>
+<li>Différence</li>
+<li>Produit cartésien</li>
+<li>Sélection</li>
+<li>Projection</li>
+<li>Renommage</li>
+<li>Jointure</li>
+</ul></li>
+</ul>
+</section>
+<section id="lunion" class="level2">
+<h2>L'union</h2>
+<ul>
+<li>Réunit dans une même relation les éléments communs des deux relations initiales</li>
+</ul>
+<figure>
+<img src="img/op_union.png" alt="Union de deux relations" /><figcaption>Union de deux relations</figcaption>
+</figure>
+</section>
+<section id="lintersection" class="level2">
+<h2>L'intersection</h2>
+<ul>
+<li>Réunit dans une relation les éléments qui sont dans les deux relations initiales</li>
+</ul>
+<figure>
+<img src="img/op_intersection.png" alt="Intersection de deux relations" /><figcaption>Intersection de deux relations</figcaption>
+</figure>
+</section>
+<section id="la-différence" class="level2">
+<h2>La différence</h2>
+<ul>
+<li>Réunit dans une relation les éléments d'une relation donnée qui ne se trouvent pas dans une autre</li>
+</ul>
+<figure>
+<img src="img/op_difference.png" alt="Différence entre deux relations" /><figcaption>Différence entre deux relations</figcaption>
+</figure>
+</section>
+<section id="le-produit-cartésien" class="level2">
+<h2>Le produit cartésien</h2>
+<ul>
+<li>Combine dans une relation les éléments de relations en entrée</li>
+</ul>
+<figure>
+<img src="img/op_produit_cartesien.png" alt="Produit cartésien de deux relations" /><figcaption>Produit cartésien de deux relations</figcaption>
+</figure>
+</section>
+<section id="la-sélection" class="level2">
+<h2>La sélection</h2>
+<ul>
+<li>Sélectionne les éléments d'une relation répondant à une condition</li>
+</ul>
+<figure>
+<img src="img/op_selection.png" alt="Sélection dans une relation" /><figcaption>Sélection dans une relation</figcaption>
+</figure>
+</section>
+<section id="la-projection" class="level2">
+<h2>La projection</h2>
+<ul>
+<li>Crée une nouvelle relation contenant l'ensemble des lignes d'une relation initiale, mais en ne conservant que certaines colonnes</li>
+</ul>
+<figure>
+<img src="img/op_projection.png" alt="Projection dans une relation" /><figcaption>Projection dans une relation</figcaption>
+</figure>
+</section>
+<section id="le-renommage" class="level2">
+<h2>Le renommage</h2>
+<ul>
+<li>Renomme une colonne dans une relation</li>
+</ul>
+<figure>
+<img src="img/op_renommage.png" alt="Renommage dans une relation" /><figcaption>Renommage dans une relation</figcaption>
+</figure>
+</section>
+<section id="la-jointure" class="level2">
+<h2>La jointure</h2>
+<ul>
+<li>Composition des éléments de deux relations répondant à un critère de jointure</li>
+</ul>
+<figure>
+<img src="img/op_jointure.png" alt="Jointure entre deux relations" /><figcaption>Jointure entre deux relations</figcaption>
+</figure>
+</section>
+<section id="clés-et-liens-entre-relations-12" class="level2">
+<h2>Clés et liens entre relations (1/2)</h2>
+<blockquote>
+<p>Une <strong>clé primaire</strong> est une colonne, ou un groupe de colonnes, permettant d'identifier de manière unique une ligne.</p>
+</blockquote>
+<blockquote>
+<p>Une <strong>clé étrangère</strong> est utilisée pour lier des relations entre elles. Elle fait référence à une clé primaire d'une autre relation.</p>
+</blockquote>
+</section>
+<section id="clés-et-liens-entre-relations-22" class="level2">
+<h2>Clés et liens entre relations (2/2)</h2>
+<ul>
+<li>Différents types de liens possibles :
+<ul>
+<li><strong>1-1</strong> : <em>un pays a une capitale, et une capitale est dans un seul pays</em></li>
+<li><strong>1-N</strong> : <em>un pays possède plusieurs villes, mais une ville n'est que dans un seul pays</em></li>
+<li><strong>N-M</strong> : <em>un pays possède des frontières et ces frontières concernent plusieurs pays</em></li>
+</ul></li>
+<li><strong>Cardinalité</strong> d'un lien</li>
+</ul>
+</section>
+<section id="exercices" class="level2">
+<h2>Exercices</h2>
+</section>
+</section>
+<section id="uml" class="level1">
+<h1>UML</h1>
+<section id="problématique" class="level2">
+<h2>Problématique</h2>
+<ul>
+<li>Comment établir le modèle conceptuel d'une BDD relationnelle ?
+<ul>
+<li>outils ?</li>
+<li>méthodologie ?</li>
+<li>... ?</li>
+</ul></li>
+</ul>
+</section>
+<section id="problématique-1" class="level2">
+<h2>Problématique</h2>
+<ul>
+<li>[x] décrire une relation (<em>Relation(Colonne1, Colonne2...)</em>)</li>
+<li>[x] décrire un domaine de manière textuelle (<em>Colonne1 est de type entier, la valeur doit être multiple de 3...</em>)</li>
+<li>[ ] le faire pour un ensemble de tables de manière concise</li>
+</ul>
+</section>
+<section id="présentation-duml-12" class="level2">
+<h2>Présentation d'UML (1/2)</h2>
+<ul>
+<li>UML = Unified Modeling Language</li>
+<li>Utilisé pour tous les aspects de la conception de projets informatiques</li>
+<li>Langage graphique, normalisé, interprétable par un ordinateur</li>
+</ul>
+</section>
+<section id="présentation-duml-22" class="level2">
+<h2>Présentation d'UML (2/2)</h2>
+<ul>
+<li>Actuellement en version 2</li>
+<li>14 diagrammes :</li>
+</ul>
+<figure>
+<img src="img/14_diagrammes_UML.png" alt="Diagrammes UML" /><figcaption>Diagrammes UML</figcaption>
+</figure>
+</section>
+<section id="diagramme-de-classe" class="level2">
+<h2>Diagramme de classe</h2>
+<ul>
+<li><em>Diagramme de base de données</em></li>
+<li>Relation représentée sous forme d'un rectangle constitué de deux cases</li>
+<li>Nom de la relation dans la case du haut</li>
+<li>Liste des colonnes dans la case du bas</li>
+<li>Syntaxe pour une colonne :
+<ul>
+<li><code>nom_colonne: type(longueur) contrainte</code></li>
+</ul></li>
+</ul>
+<figure>
+<img src="img/uml_table.png" alt="Relation en UML" /><figcaption>Relation en UML</figcaption>
+</figure>
+</section>
+<section id="clés-primaires-et-étrangères" class="level2">
+<h2>Clés primaires et étrangères</h2>
+<figure>
+<img src="img/uml_cles.png" alt="Clés primaires et étrangères en UML" /><figcaption>Clés primaires et étrangères en UML</figcaption>
+</figure>
+</section>
+<section id="différents-types-de-liens" class="level2">
+<h2>Différents types de liens</h2>
+<ul>
+<li>Lien simple</li>
+<li>Agrégation</li>
+<li>Composition</li>
+</ul>
+<figure>
+<img src="img/uml_composition_agregation.png" alt="Agrégation et composition" /><figcaption>Agrégation et composition</figcaption>
+</figure>
+</section>
+<section id="différents-types-de-liens-1" class="level2">
+<h2>Différents types de liens</h2>
+<figure>
+<img src="img/uml_composition_agregation-2.png" alt="Agrégation et composition" /><figcaption>Agrégation et composition</figcaption>
+</figure>
+</section>
+<section id="exemple-5" class="level2">
+<h2>Exemple</h2>
+<figure>
+<img src="img/MCD_voltige.png" alt="Diagramme UML de BDD" /><figcaption>Diagramme UML de BDD</figcaption>
+</figure>
+</section>
+<section id="exercices-1" class="level2">
+<h2>Exercices</h2>
+</section>
+</section>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="reveal.js/lib/js/head.min.js"></script>
+        <script type="text/javascript" src="reveal.js/js/reveal.js"></script>
+
+        <script type="text/javascript">
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                /* mettre une taille en pixel sinon l'overview ne fonctionne plus */
+                width: 1024,
+                height: 768,
+                controls: true,                                 // Display controls in the bottom right corner
+                progress: true,                                 // Display a presentation progress bar
+                history: true,                                  // Push each slide change to the browser history
+                center: false, // Vertical centering of slides
+                minScale: 0.2, // Bounds for smallestpossible content scale
+                maxScale: 1.5, // Bounds for largest possible content scale
+                slideNumber: false, // Display the page number of the current slide
+                autoSlide: 0, // Slide every duration milliseconds
+
+                theme: 'default', // available themes are in /css/theme
+                transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    // { src: 'reveal.js/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    // { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    /* ne pas activer highlight sinon la colorisation syntaxique ne fonctionne plus ? */
+                    // { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }//,
+                    // { src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } },
+                    // { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+        <!-- -A/- -include-after-body -->
+        <!-- comme le footer contient des variables, on le met dans le gabarit car
+             les variables ne sont pas interprétées via -A de pandoc -->
+        <div id="slide-ign-footer">
+            <div class="slide-ign-title">Bases de données et modélisation</div>
+            <div class="slide-ign-date">2017</div>
+        </div>
+    </body>
+</html>
+

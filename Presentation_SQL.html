@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="generator" content="pandoc">
+        <meta name="author" content="Division des enseignements en informatique" />
+        <meta name="dcterms.date" content="2016-01-01" />
+        <title>Le langage SQL</title>
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+		
+        <!-- For syntax highlighting -->
+        <style type="text/css">code{white-space: pre;}</style>
+        <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+        </style>
+        <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+        <link rel="stylesheet" href="reveal.js/css/theme/simple.css" id="theme">
+
+
+	<!-- Styles ENSG-IGN -->
+	<link rel="stylesheet" href="css/ign.css">
+
+        <!-- Printing and PDF exports -->
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script type="text/javascript">
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = 'reveal.js/css/print/'+ (window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper') + '.css';
+            link.media = 'print';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script type="text/javascript" type="text/javascript" src="reveal.js/lib/js/html5shiv.js"></script>
+        <![endif]-->
+        <!-- -H/- -include-in-header -->
+    </head>
+    <body>
+        <!-- -B/- -include-before-body -->
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+
+                <section>
+                    <h1>Le langage SQL</h1>
+                    <h3>Division des enseignements en informatique</h3>
+                    <h4>2016</h4>
+                </section>
+
+                <!-- - -toc/- -table-of-contents -->
+
+            <!-- ne pas indenter le $body$ sinon les codes (highlight) vont l'être aussi !!! -->
+<section id="le-langage-sql" class="level1">
+<h1>Le langage SQL</h1>
+<section id="introduction" class="level2">
+<h2>Introduction</h2>
+<ul>
+<li>SQL (<em>Structured Query Language</em>)
+<ul>
+<li>langage de communication avec une BDD relationnelle</li>
+<li>recherche, ajout, modification, suppression de données</li>
+<li>créé en 1974</li>
+<li>normalisé en 1986</li>
+</ul></li>
+</ul>
+</section>
+<section id="sql-et-les-sgbd" class="level2">
+<h2>SQL et les SGBD</h2>
+<ul>
+<li>Implémenté dans la plupart des SGBD</li>
+<li>Mais étendu différemment par chaque SQBD
+<ul>
+<li>Cours sur SQL de base</li>
+</ul></li>
+</ul>
+<figure>
+<img src="img/logo_postgres.png" alt="Logo PostgreSQL" /><figcaption>Logo PostgreSQL</figcaption>
+</figure>
+</section>
+<section id="exercice" class="level2">
+<h2>Exercice</h2>
+<pre><code>Un club d&#39;oenologie souhaite enregistrer les résultats des dégustations qu&#39;il organise avec 
+ces adhérents afin d&#39;effectuer des analyses permettant de proposer les vins les plus appréciés 
+lors des sessions suivantes.
+
+L&#39;association possède le nom, le prénom, l&#39;âge et la ville de résidence de chaque adhérent.
+
+Elle note déjà sur un cahier pour chaque dégustation la date, les participants, les vins 
+dégustés (appelation, millésime, degré, cépage principal, quantité consommée) ainsi que 
+les impressions (sous forme de note allant de 1 à 5).
+
+Proposer une modélisation d&#39;une base de données permettant d&#39;enregistrer ces informations.</code></pre>
+</section>
+<section id="exercice---schéma-relationnel" class="level2">
+<h2>Exercice - schéma relationnel</h2>
+<pre><code>Buveur (__id__, nom, prenom, naissance, ville)
+
+Cepage (__id__, nom)
+
+Vin (__id__, appelation, millesime, degres, id_cepage)
+
+Degustation (__id_b__, __id_v__, date_degust, note, quantite)</code></pre>
+<ul>
+<li>Où :
+<ul>
+<li>id_b est une clé étrangère vers id de la relation Buveur</li>
+<li>id_v est une clé étrangère vers id de la relation Vin</li>
+<li>id_cepage est une clé étrangère vers id de la relation Cepage</li>
+</ul></li>
+</ul>
+</section>
+<section id="exercice---schéma-conceptuel" class="level2">
+<h2>Exercice - schéma conceptuel</h2>
+<figure>
+<img src="img/MCD_club_oenologie.png" alt="Diagramme de BDD" /><figcaption>Diagramme de BDD</figcaption>
+</figure>
+</section>
+<section id="création-dune-bdd" class="level2">
+<h2>Création d'une BDD</h2>
+<ul>
+<li>Nous utiliserons le SGBD PostgreSQL pour implémenter notre base :
+<ul>
+<li>Sur votre ordinateur, ouvrez le logiciel PgAdmin</li>
+<li>Dépliez <code>PostgreSQL 9.3 (x86) (localhost:5432)</code></li>
+<li>Puis effectuez un clic droit sur <code>Bases de données</code> pour <em>Ajouter une base de données</em></li>
+</ul></li>
+</ul>
+<figure>
+<img src="img/pg_admin-1.png" alt="Création d&#39;une base de données (1/2)" /><figcaption>Création d'une base de données (1/2)</figcaption>
+</figure>
+</section>
+<section id="création-dune-bdd-1" class="level2">
+<h2>Création d'une BDD</h2>
+<ul>
+<li>Dans <code>nom</code> saisissez <em>Club_oenologie</em> et validez pour créer la base</li>
+</ul>
+<figure>
+<img src="img/pg_admin-2.png" alt="Création d&#39;une base de données (2/2)" /><figcaption>Création d'une base de données (2/2)</figcaption>
+</figure>
+</section>
+<section id="exécution-de-reqêtes-sql" class="level2">
+<h2>Exécution de reqêtes SQL</h2>
+<ul>
+<li>Pour exécuter des reqêtes SQL sur votre base, commencez par vous y connecter :
+<ul>
+<li>Cliquez sur votre base <em>Club_oenologie</em> dans PgAdmin</li>
+<li>La croix rouge sur l'icône de la base disparait</li>
+<li>Cliquez ensuite sur le bouton <em>Exécuter vos propres requêtes SQL</em></li>
+</ul></li>
+</ul>
+<figure>
+<img src="img/pg_admin-3.png" alt="Base ouverte" /><figcaption>Base ouverte</figcaption>
+</figure>
+<figure>
+<img src="img/pg_admin-4.png" alt="Bouton Exécuter vos requêtes SQL" /><figcaption>Bouton <em>Exécuter vos requêtes SQL</em></figcaption>
+</figure>
+</section>
+<section id="exécution-de-reqêtes-sql-1" class="level2">
+<h2>Exécution de reqêtes SQL</h2>
+<ul>
+<li>Nous travaillerons dans la nouvelle fenêtre qui s'ouvre</li>
+</ul>
+<figure>
+<img src="img/pg_admin-5.png" alt="Fenêtre SQL de PgAdmin" /><figcaption>Fenêtre SQL de PgAdmin</figcaption>
+</figure>
+</section>
+<section id="création-dune-table" class="level2">
+<h2>Création d'une table</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">TABLE</span> nom_table (colonne1 type1, colonne2 type2...);</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">TABLE</span> Buveur (<span class="kw">id</span> <span class="dt">integer</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, 
+                     nom <span class="dt">varchar</span>(<span class="dv">50</span>), 
+                     prenom <span class="dt">varchar</span>(<span class="dv">50</span>), 
+                     naissance <span class="dt">integer</span>, 
+                     ville <span class="dt">varchar</span>(<span class="dv">50</span>));</code></pre></div>
+</section>
+<section id="ajout-dune-ligne-à-une-table" class="level2">
+<h2>Ajout d'une ligne à une table</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">INSERT</span> <span class="kw">INTO</span> nom_table (colonneI, colonneJ) <span class="kw">VALUES</span> (valeurI, valeurJ);</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">INSERT</span> <span class="kw">INTO</span> Buveur (<span class="kw">id</span>, nom, prenom, naissance, ville) 
+<span class="kw">VALUES</span> (<span class="dv">1</span>, <span class="st">&#39;Mir&#39;</span>, <span class="st">&#39;Abel&#39;</span>, <span class="dv">1980</span>, <span class="st">&#39;Bordeaux&#39;</span>);</code></pre></div>
+</section>
+<section id="sélection-des-éléments-dune-table" class="level2">
+<h2>Sélection des éléments d'une table</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> nom_table;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> Buveur;</code></pre></div>
+</section>
+<section id="exercice-1" class="level2">
+<h2>Exercice (1)</h2>
+<ul>
+<li>Créez la table <em>Cepage</em></li>
+<li>Ajoutez les éléments suivants à la table Cepage
+<ul>
+<li>(1, Pinot noir)</li>
+<li>(2, Gamay)</li>
+<li>(3, Cabernet sauvignon)</li>
+<li>(4, Merlot)</li>
+<li>(5, Malbec)</li>
+<li>(6, Syrah)</li>
+</ul></li>
+</ul>
+</section>
+<section id="suppressionajout-dune-colonne" class="level2">
+<h2>Suppression/ajout d'une colonne</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="co">--suppression--</span>
+<span class="kw">ALTER</span> <span class="kw">TABLE</span> nom_table <span class="kw">DROP</span> <span class="kw">COLUMN</span> colonne;
+
+<span class="co">--ajout--</span>
+<span class="kw">ALTER</span> <span class="kw">TABLE</span> nom_table <span class="kw">ADD</span> <span class="kw">COLUMN</span> colonne <span class="kw">type</span>;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">ALTER</span> <span class="kw">TABLE</span> Cepage <span class="kw">DROP</span> <span class="kw">COLUMN</span> <span class="kw">id</span>;
+<span class="kw">ALTER</span> <span class="kw">TABLE</span> Cepage <span class="kw">ADD</span> <span class="kw">COLUMN</span> <span class="kw">id</span> serial <span class="kw">PRIMARY</span> <span class="kw">KEY</span>;</code></pre></div>
+</section>
+<section id="suppression-dune-table" class="level2">
+<h2>Suppression d'une table</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">DROP</span> <span class="kw">TABLE</span> nom_table;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">DROP</span> <span class="kw">TABLE</span> Buveur;</code></pre></div>
+</section>
+<section id="exercice-2" class="level2">
+<h2>Exercice (2)</h2>
+<ul>
+<li>Recréez la table <em>Buveur</em> en utilisant le type <code>serial</code> pour la colonne <code>id</code></li>
+<li>Ajoutez les éléments suivants :
+<ul>
+<li>('Mir', 'Abel', 1990, 'Bordeaux')</li>
+<li>('Bonneau', 'Jean', 1995, 'Paris')</li>
+<li>('Fonfec', 'Sophie', 1989, 'Lille')</li>
+<li>('Deuf', 'John', 1993, 'Toulouse')</li>
+<li>('Covers', 'Harry', 1992, 'Ajaccio')</li>
+<li>('Mousse', 'Emma', 1995, 'Paris')</li>
+<li>('Mir', 'Jade', 1996, 'Bordeaux')</li>
+</ul></li>
+</ul>
+</section>
+<section id="projection" class="level2">
+<h2>Projection</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> colonneI, colonneJ <span class="kw">FROM</span> nom_table;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> nom, prenom <span class="kw">FROM</span> Buveur;</code></pre></div>
+</section>
+<section id="selection" class="level2">
+<h2>Selection</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> nom_table <span class="kw">WHERE</span> condition;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> Buveur <span class="kw">WHERE</span> <span class="kw">id</span> = <span class="dv">4</span>;</code></pre></div>
+</section>
+<section id="exercice-3" class="level2">
+<h2>Exercice (3)</h2>
+<ol type="1">
+<li>Affichez les prénoms et années de naissance des buveurs</li>
+<li>Affichez les noms des cépages</li>
+<li>Affichez les buveurs dont le nom est Mir</li>
+<li>Affichez les buveurs dont l'année de naissance est postérieure à 1992</li>
+<li>Affichez les cépages dont le nom commence par un 'M'
+<ul>
+<li><code>%</code> est utilisé pour signifier <em>n'importe suite de caractères</em></li>
+<li><code>_</code> est utilisé pour signifier <em>n'importe quel caractère</em></li>
+<li>l'opérateur <code>like</code> est utilisé pour tester la ressemblance de chaînes de caractères</li>
+</ul></li>
+<li>Affichez les prénoms des buveurs dont la ville de résidence est Paris</li>
+</ol>
+</section>
+<section id="suppression-dune-ligne" class="level2">
+<h2>Suppression d'une ligne</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">DELETE</span> <span class="kw">FROM</span> nom_table <span class="kw">WHERE</span> condition;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">DELETE</span> <span class="kw">FROM</span> Buveur <span class="kw">WHERE</span> <span class="kw">id</span> = <span class="dv">1</span>;</code></pre></div>
+</section>
+<section id="modification-dune-ligne" class="level2">
+<h2>Modification d'une ligne</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">UPDATE</span> nom_table <span class="kw">SET</span> colonne = valeur <span class="kw">WHERE</span> condition;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">UPDATE</span> Buveur <span class="kw">SET</span> naissance = <span class="dv">2000</span> <span class="kw">WHERE</span> <span class="kw">id</span> = <span class="dv">3</span>;</code></pre></div>
+</section>
+<section id="clé-étrangère" class="level2">
+<h2>Clé étrangère</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">TABLE</span> nom_table (colonne <span class="kw">type</span> <span class="kw">REFERENCES</span> autre_table(autre_colonne));</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">TABLE</span> Vin (<span class="kw">id</span> serial <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, 
+                  appelation <span class="dt">varchar</span>(<span class="dv">100</span>), 
+                  millesime <span class="dt">integer</span>, 
+                  degres <span class="dt">float</span>, 
+                  id_cepage <span class="dt">integer</span> <span class="kw">REFERENCES</span> Cepage(<span class="kw">id</span>));</code></pre></div>
+</section>
+<section id="contraintes" class="level2">
+<h2>Contraintes</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="co">--lors de la création de la table--</span>
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> nom_table (colonne <span class="kw">type</span> contrainte);
+
+<span class="co">--ajout ultérieure--</span>
+<span class="kw">ALTER</span> <span class="kw">TABLE</span> nom_table <span class="kw">ADD</span> <span class="kw">CONSTRAINT</span> nom_contrainte contrainte;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">DROP</span> <span class="kw">TABLE</span> Vin;
+<span class="kw">CREATE</span> <span class="kw">TABLE</span> Vin (<span class="kw">id</span> serial <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, 
+                  cru <span class="dt">varchar</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>, 
+                  millesime <span class="dt">integer</span> <span class="kw">CHECK</span> (millesime &lt; <span class="dv">2015</span>), 
+                  degres <span class="dt">float</span>, 
+                  id_cepage <span class="dt">integer</span> <span class="kw">REFERENCES</span> Cepage(<span class="kw">id</span>));</code></pre></div>
+</section>
+<section id="exercice-4" class="level2">
+<h2>Exercice (4)</h2>
+<ol type="1">
+<li>Supprimez la table <em>Cepage</em> et utilisez les requêtes transmises par le professeur pour la recréer</li>
+<li>Passez la ville de naissance de Deuf John de Toulouse à Dijon</li>
+<li>Ajoutez une contrainte pour interdire les buveurs de moins de 18 ans (né après 1998)</li>
+<li>Affichez les prénoms des buveurs restants</li>
+<li>Ajoutez le buveur ('Perret', 'Ines', 2000, 'Marseille')</li>
+<li>Passez l'année de naissance à 2003 pour les buveurs né dans une ville dont le nom commance par un 'P'</li>
+</ol>
+</section>
+<section id="exercice-5" class="level2">
+<h2>Exercice (5)</h2>
+<ol type="1">
+<li>Ajoutez des vins à la base (requêtes transmises par le professeur)</li>
+<li>Affichez le contenu de cette table</li>
+</ol>
+</section>
+<section id="exercice-6" class="level2">
+<h2>Exercice (6)</h2>
+<ol type="1">
+<li>Créez la table Degustation(id_b, id_v, date_degust, note, quantite) où
+<ul>
+<li>id_b est une clé étrangère vers l'identifiant de la table Buveur</li>
+<li>id_v est une clé étrangère vers l'identifiant de la table Buveur</li>
+<li>il ne faut pas oublier d'inclure une clé primaire</li>
+</ul></li>
+<li>Insérez les éléments permettant de traduire le fait que le 12/03/2016, Jean, John, Harry et Jade ont dégusté un Haûte Côte de Nuit (10 cl chacun) et lui attribué respectivement les notes 2, 3, 3, 1.</li>
+<li>John ayant apprécié le vin, s'est finalement resservi 5cl. Mettez à jour la base pour en tenir compte.</li>
+</ol>
+</section>
+<section id="produit-cartésien" class="level2">
+<h2>Produit cartésien</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> nom_table1, nom_table2;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> Vin, Cepage;</code></pre></div>
+</section>
+<section id="jointure" class="level2">
+<h2>Jointure</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> nom_table_g <span class="kw">JOIN</span> nom_table_d <span class="kw">ON</span> condition_de_jointure;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> Vin <span class="kw">JOIN</span> Cepage <span class="kw">ON</span> Vin.id_cepage = Cepage.id;</code></pre></div>
+</section>
+<section id="exercice-7" class="level2">
+<h2>Exercice (7)</h2>
+<ol type="1">
+<li>Affichez les vins dont le cépage principal est la syrah</li>
+<li>Affichez le nom des appélations des vins dont le cépage principal est le merlot</li>
+<li>Affichez les noms des cépages des appélations Saint Aubun et Cornas</li>
+<li>Affichez les noms des participants à la dégustation du 12/03/2016</li>
+</ol>
+</section>
+<section id="trier-des-résultats" class="level2">
+<h2>Trier des résultats</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> nom_table <span class="kw">ORDER</span> <span class="kw">BY</span> colonneI;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> * <span class="kw">FROM</span> Buveur <span class="kw">ORDER</span> <span class="kw">BY</span> nom;
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> Buveur <span class="kw">ORDER</span> <span class="kw">BY</span> naissance <span class="kw">DESC</span>;</code></pre></div>
+</section>
+<section id="compter-des-éléments" class="level2">
+<h2>Compter des éléments</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">COUNT</span>(*) <span class="kw">FROM</span> nom_table <span class="kw">WHERE</span> condition;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> <span class="fu">COUNT</span>(*) <span class="kw">FROM</span> Buveur;</code></pre></div>
+</section>
+<section id="regrouper-les-résultats" class="level2">
+<h2>Regrouper les résultats</h2>
+<ul>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> colonneI, ... <span class="kw">FROM</span> nom_table <span class="kw">GROUP</span> <span class="kw">BY</span> colonneI;</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> millesime, <span class="fu">COUNT</span>(*) <span class="kw">FROM</span> Vin <span class="kw">GROUP</span> <span class="kw">BY</span> millesime;
+<span class="kw">SELECT</span> appelation, <span class="fu">AVG</span>(degres) <span class="kw">FROM</span> Vin <span class="kw">GROUP</span> <span class="kw">BY</span> appelation;</code></pre></div>
+<ul>
+<li>Fonctions possibles : COUNT(), AVG(), MIN(), MAX(), SUM()</li>
+</ul>
+</section>
+<section id="exercice-8" class="level2">
+<h2>Exercice (8)</h2>
+<ol type="1">
+<li>Affichez le nombre de vins par cepage</li>
+<li>Affichez les notes moyenne, maximale et minimale attribuées à chacune des appélations</li>
+<li>Affichez la note moyenne attribuée à chacun des cépages</li>
+<li>Affichez le total d'alcool consommé par chacun des buveurs, ainsi que le nombre de dégustations, et en les triant par ordre décroissant d'alcool consommé</li>
+<li>Affichez le meilleur millesime de l'appelation Saint Julien</li>
+</ol>
+</section>
+<section id="les-vues" class="level2">
+<h2>Les vues</h2>
+<ul>
+<li><strong>Vue</strong> = table virtuelle définie par une requête</li>
+<li>Syntaxe :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">VIEW</span> nom_vue (colonne1, colonne2...) <span class="kw">AS</span> (</code></pre></div>
+<ul>
+<li>Exemple :</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">CREATE</span> <span class="kw">VIEW</span> vin_cepage (appelation, cepage) <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> vin.appelation, cepage.nom 
+    <span class="kw">FROM</span> vin JOIM cepage <span class="kw">ON</span> vin.id_cepage=cepage.id 
+    <span class="kw">GROUP</span> <span class="kw">BY</span> vin.appelation, cepage.nom
+);
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> vin_cepage <span class="kw">WHERE</span> cepage = <span class="st">&#39;Merlot&#39;</span>;</code></pre></div>
+</section>
+<section id="exercice-9" class="level2">
+<h2>Exercice (9)</h2>
+<ol type="1">
+<li>Créez une vue contenant le prénom, la quantité d'alcool consommée lors d'une journée de dégustation, la date de cette dégustation et le nombre vins goutés des trois buveurs ayant consommé le plus lors d'une dégustation</li>
+<li>Affichez votre vue</li>
+<li>Ajoutez une dégustation avec une quantité suffisante pour faire varier le classement des plus gros buveurs</li>
+<li>Affichez de nouveau votre vue</li>
+</ol>
+</section>
+<section id="divers-1" class="level2">
+<h2>Divers (1)</h2>
+<ul>
+<li>Création d'une base (avancé) :
+<ul>
+<li>Utilisation de l'utilitaire createdb.exe (dossier bin du répertoire d'installation de PostgreSQL) createbd.exe -p 5432 -h localhost nom_base</li>
+<li>requête SQL CREATEDB nom_base;</li>
+</ul></li>
+<li><p>Suppression d'une base : dropdb.exe --if-exists nom_base</p></li>
+<li><p>Connexion moteur PostgreSQL sans interface graphique PgAdmin : psql.exe -d nom_base -h hote -p port -U utilsateur</p></li>
+</ul>
+</section>
+<section id="divers-2" class="level2">
+<h2>Divers (2)</h2>
+<ul>
+<li>Alias</li>
+<li>Jointures par la gauche / par la droite, interne / externe</li>
+<li>Sous requêtes</li>
+<li>IN</li>
+<li>EXIST / NOT EXIST</li>
+<li>Index</li>
+</ul>
+</section>
+<section id="création-dune-table-1" class="level2">
+<h2>Création d'une table</h2>
+<ul>
+<li>Lorsque la requête est exécutée, elle apparait dans le navigateur de PgAdmin.</li>
+</ul>
+<figure>
+<img src="img/pg_admin-6.png" alt="Table crée" /><figcaption>Table crée</figcaption>
+</figure>
+</section>
+<section id="ajout-dune-ligne-à-une-table-1" class="level2">
+<h2>Ajout d'une ligne à une table</h2>
+<ul>
+<li>Dans l'interface générale de PgAdmin, on peut visualiser que la ligne a bien été ajoutée
+<ul>
+<li>Sélectionnez la table dans le navigateur</li>
+<li>Cliquez sur le bouton <em>Afficher le données</em></li>
+</ul></li>
+</ul>
+<figure>
+<img src="img/pg_admin-7.png" alt="Afficher données" /><figcaption>Afficher données</figcaption>
+</figure>
+<figure>
+<img src="img/pg_admin-8.png" alt="Ligne ajoutée" /><figcaption>Ligne ajoutée</figcaption>
+</figure>
+</section>
+</section>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="reveal.js/lib/js/head.min.js"></script>
+        <script type="text/javascript" src="reveal.js/js/reveal.js"></script>
+
+        <script type="text/javascript">
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                /* mettre une taille en pixel sinon l'overview ne fonctionne plus */
+                width: 1024,
+                height: 768,
+                controls: true,                                 // Display controls in the bottom right corner
+                progress: true,                                 // Display a presentation progress bar
+                history: true,                                  // Push each slide change to the browser history
+                center: false, // Vertical centering of slides
+                minScale: 0.2, // Bounds for smallestpossible content scale
+                maxScale: 1.5, // Bounds for largest possible content scale
+                slideNumber: false, // Display the page number of the current slide
+                autoSlide: 0, // Slide every duration milliseconds
+
+                theme: 'default', // available themes are in /css/theme
+                transition: 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    // { src: 'reveal.js/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    // { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    /* ne pas activer highlight sinon la colorisation syntaxique ne fonctionne plus ? */
+                    // { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }//,
+                    // { src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } },
+                    // { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+        <!-- -A/- -include-after-body -->
+        <!-- comme le footer contient des variables, on le met dans le gabarit car
+             les variables ne sont pas interprétées via -A de pandoc -->
+        <div id="slide-ign-footer">
+            <div class="slide-ign-title">Le langage SQL</div>
+            <div class="slide-ign-date">2016</div>
+        </div>
+    </body>
+</html>
+
