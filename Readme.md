@@ -1,4 +1,4 @@
-# Python_ENSG_Geomatique
+# Cours de bases de données
 
 Cours d'initiation aux bases de données initialement conçu pour des étudiants de divers cycles de l'[ENSG Géomatique](http://www.ensg.eu).
 
